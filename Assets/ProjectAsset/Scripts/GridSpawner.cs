@@ -16,10 +16,14 @@ public class GridSpawner : MonoBehaviour
     [SerializeField] float gridOffset;
     [SerializeField] int Test_x;
     [SerializeField] int Test_z;
+     int unWalkableCellsinRaw=4;
+    [SerializeField] int diffaultValue;
+
 
     [HideInInspector] public int[,] GridValue;
     void Start()
     {
+        diffaultValue = unWalkableCellsinRaw;
         GridValue = new int[gridX, gridZ];
         itemToSpwan = new GridType[gridX, gridZ];
         for (int i = 0; i < gridX; i++)
@@ -27,46 +31,33 @@ public class GridSpawner : MonoBehaviour
             for (int j = 0; j < gridZ; j++)
             {
                 itemToSpwan[i, j] = new GridType();
-
             }
         }
         SpawnGrid();
     }
-    //For testing porpose
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.S))
-    //        for (int i = 0; i < gridX; i++)
-    //        {
-    //            for (int j = 0; j < gridZ; j++)
-    //            {
-    //                Debug.Log(string.Format("item [{0},{1}]", i, j, itemToSpwan[i, j]));
-    //            }
-    //        }
-    //    if (Input.GetKeyDown(KeyCode.D))
-    //        Debug.Log(" value x " + itemToSpwan.Length.ToString());
-    //    if (Input.GetKeyDown(KeyCode.A))
-    //        Debug.Log(" value x " + itemToSpwan[Test_x, Test_z].gridWalkabliliyState.ToString()+ " ( "+ itemToSpwan[Test_x, Test_z] .Xindex+ " , "+ itemToSpwan[Test_x, Test_z] .Zindex+ " )");
-    //}
     void SpawnGrid()
     {
         for (int i = 0; i < gridX; i++)
+        {
+            unWalkableCellsinRaw = diffaultValue;
             for (int j = 0; j < gridZ; j++)
             {
                 Vector3 spawnObjPosition = new Vector3(i * gridOffset, .5f, j * gridOffset) + gridOrigin;
-                spawnObj(spawnObjPosition, unWalkableGrid, Quaternion.identity, i, j);
+                spawnObj(spawnObjPosition, unWalkableGrid, Quaternion.identity, i, j,ref unWalkableCellsinRaw,j%2==1);
             }
+        }
     }
-    private void spawnObj(Vector3 objPos, GameObject spawnPrefab, Quaternion objRotation, int X_Index, int Z_Index)
+    private void spawnObj(Vector3 objPos, GameObject spawnPrefab, Quaternion objRotation, int X_Index, int Z_Index,ref int unwalks,bool mod)
     {
         int x = UnityEngine.Random.Range(1, 3);
         GameObject cloneItem;
-        if (unWalkingGridNumber > 0 && (x == 2))
+        if (unWalkingGridNumber > 0 && (x == 2) && unWalkableCellsinRaw>0 && unwalks>0&& mod)
         {
             unWalkingGridNumber--;
             cloneItem = GameObject.Instantiate(walkableGrid, objPos, objRotation, this.transform);
             cloneItem.name = string.Format("[{0},{1}]", X_Index, Z_Index);
             itemToSpwan[X_Index, Z_Index].AddValues(cloneItem, GridWalkabliliyState.unwalkable, X_Index,Z_Index);
+            unwalks--;
         }
         else
         {
