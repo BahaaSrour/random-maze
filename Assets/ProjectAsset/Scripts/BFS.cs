@@ -32,16 +32,16 @@ public class BFS : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             Debug.Log(gs.itemToSpwan[0, 0]);
-            bfs(gs.itemToSpwan[0, 0], gs.itemToSpwan[X_goal, Z_goal]);
+            bfs();
       
         }
     }
 
     bool tergetFound;
-    public void bfs(GridType startNode )
+    public void bfs( )
     {
-        Visited.Enqueue(startNode);
-        if (startNode.gridWalkabliliyState == GridWalkabliliyState.unwalkable)
+        Visited.Enqueue(gs.itemToSpwan[playerPosX, playerPosZ]);
+        if (gs.itemToSpwan[playerPosX, playerPosZ].gridWalkabliliyState == GridWalkabliliyState.unwalkable)
         {
             Debug.Log("Cant Move");
             return;
@@ -65,6 +65,7 @@ public class BFS : MonoBehaviour
             GameObject.Instantiate(Pathprefab, tmp.CellType.transform.position, Quaternion.identity);
             tmp = tmp.parentInGrid;
         }
+            GameObject.Instantiate(Pathprefab, gs.itemToSpwan[playerPosX, playerPosZ].CellType.transform.position, Quaternion.identity);
 
     }
     bool goalHasFound;
