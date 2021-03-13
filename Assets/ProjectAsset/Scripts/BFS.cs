@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BFS : MonoBehaviour
 {
@@ -15,15 +16,28 @@ public class BFS : MonoBehaviour
     [SerializeField] GameObject Pathprefab;
     [SerializeField] GameObject Goalprefab;
     [SerializeField] Text text;
+
+    public static Vector2Int player;
+    public static Vector2Int goal;
+
+    private void Awake()
+    {
+        player.x = playerPosX;
+        player.y = playerPosZ;
+        goal.x = X_goal;
+        goal.y = Z_goal;
+    }
     void Start()
-    { 
+    {
+        
         Visited = new Queue<GridType>();
         gs.itemToSpwan[X_goal, Z_goal].CellType.GetComponent<MeshRenderer>().material.color = Color.yellow;
         gs.itemToSpwan[playerPosX, playerPosZ].CellType.GetComponent<MeshRenderer>().material.color = Color.green;
         gs.itemToSpwan[playerPosX, playerPosZ].gridWalkabliliyState = GridWalkabliliyState.walkable;
         // gs.itemToSpwan[X_goal, Z_goal].gridWalkabliliyState = GridWalkabliliyState.walkable;
-
     }
+
+   
     bool tergetFound;
     public void bfs( )
     {
@@ -104,6 +118,11 @@ public class BFS : MonoBehaviour
         }
         else { Debug.Log("goalHasFound"); tergetFound = true; }
         return;
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }

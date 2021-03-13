@@ -35,6 +35,7 @@ public class GridSpawner : MonoBehaviour
         }
         SpawnGrid();
     }
+    bool playerOrGoal=false;
     void SpawnGrid()
     {
         for (int i = 0; i < gridX; i++)
@@ -43,7 +44,9 @@ public class GridSpawner : MonoBehaviour
             for (int j = 0; j < gridZ; j++)
             {
                 Vector3 spawnObjPosition = new Vector3(i * gridOffset, .5f, j * gridOffset) + gridOrigin;
-                spawnObj(spawnObjPosition, unWalkableGrid, Quaternion.identity, i, j,ref unWalkableCellsinRaw,j%2==1);
+                if ((i == BFS.player.x && j == BFS.player.y) || (i == BFS.goal.x && j == BFS.goal.y)) playerOrGoal = true;
+                spawnObj(spawnObjPosition, unWalkableGrid, Quaternion.identity, i, j,ref unWalkableCellsinRaw,(j%2==0 ||i%2==1 ));
+                playerOrGoal = false;
             }
         }
     }
@@ -51,7 +54,7 @@ public class GridSpawner : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(1, 3);
         GameObject cloneItem;
-        if (unWalkingGridNumber > 0 && (x == 2) && unWalkableCellsinRaw>0 && unwalks>0&& mod)
+        if (unWalkingGridNumber > 0 && (x == 2) && unWalkableCellsinRaw>0 && unwalks>0&& mod&&!playerOrGoal )
         {
             unWalkingGridNumber--;
             cloneItem = GameObject.Instantiate(walkableGrid, objPos, objRotation, this.transform);
