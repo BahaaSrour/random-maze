@@ -7,7 +7,6 @@ public class GridSpawner : MonoBehaviour
 {
     [SerializeField] public GridType[,] itemToSpwan;
     [SerializeField] GameObject unWalkableGrid;
-    [SerializeField] int unWalkingGridNumber;
     [SerializeField] GameObject walkableGrid;
     [SerializeField] GameObject PathSolutionGrid;
     [SerializeField] public int gridX = 5;
@@ -16,8 +15,9 @@ public class GridSpawner : MonoBehaviour
     [SerializeField] float gridOffset;
     [SerializeField] int Test_x;
     [SerializeField] int Test_z;
-     int unWalkableCellsinRaw=4;
     [SerializeField] int diffaultValue;
+    int unWalkableCellsinRaw=4;
+    public int unWalkingGridNumber;
 
 
     [HideInInspector] public int[,] GridValue;
@@ -75,6 +75,7 @@ public enum GridWalkabliliyState
     walkable = 1,
     unwalkable = 2
 }
+
 public class GridType
 {
     public int weight;
@@ -93,3 +94,4 @@ public class GridType
     }
 
 }
+

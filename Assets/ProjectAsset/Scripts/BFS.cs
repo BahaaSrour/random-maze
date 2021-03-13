@@ -10,22 +10,34 @@ public class BFS : MonoBehaviour
     [SerializeField] List<GridType> visitedGridsList;
     [SerializeField] int playerPosX;
     [SerializeField] int playerPosZ;
-    public int gridLength;
     [SerializeField] int X_goal;
     [SerializeField] int Z_goal;
     [SerializeField] GameObject Pathprefab;
     [SerializeField] GameObject Goalprefab;
     [SerializeField] Text text;
 
+    bool tergetFound;
+    public Queue<GridType> Visited;
+    GridType tmp;
     public static Vector2Int player;
     public static Vector2Int goal;
+    public static int unWalkingGridNumber;
 
+    public bool LoadSettingsFromFile= true;
     private void Awake()
     {
-        player.x = playerPosX;
-        player.y = playerPosZ;
-        goal.x = X_goal;
-        goal.y = Z_goal;
+        if (LoadSettingsFromFile)
+        {
+            XMLSaverAndLoader.LoadSettings(this);
+        }
+        else
+        {
+            player.x = playerPosX;
+            player.y = playerPosZ;
+            goal.x = X_goal;
+            goal.y = Z_goal;
+            unWalkingGridNumber = gs.unWalkingGridNumber;
+        }
     }
     void Start()
     {
@@ -37,8 +49,7 @@ public class BFS : MonoBehaviour
         // gs.itemToSpwan[X_goal, Z_goal].gridWalkabliliyState = GridWalkabliliyState.walkable;
     }
 
-   
-    bool tergetFound;
+
     public void bfs( )
     {
         Visited.Enqueue(gs.itemToSpwan[playerPosX, playerPosZ]);
@@ -74,8 +85,7 @@ public class BFS : MonoBehaviour
             GameObject.Instantiate(Pathprefab, gs.itemToSpwan[playerPosX, playerPosZ].CellType.transform.position, Quaternion.identity);
 
     }
-    public Queue<GridType> Visited;
-    GridType tmp;
+
     void Solve(/*int X_index, int Z_index,*/ int Xgoal, int Zgoal)
     {
         if (!(tmp.Xindex == Xgoal && tmp.Zindex == Zgoal))
@@ -125,4 +135,31 @@ public class BFS : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+   public void SetSettings(Settings settings)
+   {
+        if (settings != null)
+        {
+            player = settings.player;
+            playerPosX = player.x;
+            playerPosZ = player.y;
+            goal = settings.goal;
+            X_goal = goal.x;
+            Z_goal = goal.y;
+            unWalkingGridNumber = settings.maxNumberOfBlock;
+            gs.unWalkingGridNumber = settings.maxNumberOfBlock;
+        }
+        else 
+        {
+            player.x = playerPosX;
+            player.y = playerPosZ;
+            goal.x = X_goal;
+            goal.y = Z_goal;
+            unWalkingGridNumber = gs.unWalkingGridNumber;
+        }
+   }
+   public static Settings GetSettings ()
+   {
+        return new Settings { player = player,goal = goal, maxNumberOfBlock= unWalkingGridNumber};
+   }
 }
+

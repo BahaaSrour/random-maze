@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <player>
+    <x>3</x>
+    <y>0</y>
+  </player>
+  <goal>
+    <x>1</x>
+    <y>5</y>
+  </goal>
+  <maxNumberOfBlock>10</maxNumberOfBlock>
+</Settings>
